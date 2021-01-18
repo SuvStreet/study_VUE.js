@@ -10,7 +10,7 @@ const App = {
         {
           title: 'Основы',
           text:
-            'В блоке вы познакомитесь со всеми основами Vue.js на практике. На протяжении блока мы напишем реактивное приложение, в процессе разработки которого разберем вся базу фреймворка.',
+            'В блоке вы познакомитесь со всеми основами Vue.js на практике. На протяжении блока мы напишем реактивное приложение, в процессе разработки которого разберем всю базу фреймворка.',
         },
         {
           title: 'Компоненты',
@@ -33,9 +33,9 @@ const App = {
             'Одним из наиболее важных обновлений в Vue 3 является появление альтернативного синтаксиса Composition API. В этом блоке вы узнаете все, чтобы полностью пользоваться данными синтаксисом на практических примерах. Помимо этого вы узнаете как работать совместно с Vue Router и Vuex.',
         },
       ],
-      textBtnNextOfFinish: ['Вперёд', 'Закончить'],
-      textBtnPrevOfStart: ['Назад', 'Начать заново'],
-      flag: true,
+      textBtnNextOrFinish: ['Вперёд', 'Закончить'],
+      textBtnPrevOrStart: ['Назад', 'Начать заново'],
+      expire: true,
     };
   },
   methods: {
@@ -45,21 +45,22 @@ const App = {
     },
     reset() {
       // начать заново
-      this.activeIndex = 0
-      this.flag = true
+      this.activeIndex = 0;
+      this.expire = true;
     },
-    nextOfFinish() {
+    nextOrFinish() {
       // кнопка вперед или закончить
       if (this.activeIndex < this.steps.length - 1) {
-        this.activeIndex++
-      }
-      else {
-        this.flag = false
+        this.activeIndex++;
+      } else {
+        this.expire = false;
       }
     },
     setActive(idx) {
       // когда нажимаем на определенный шаг
-      this.activeIndex = idx;
+      if (idx !== this.activeIndex) {
+        this.activeIndex = idx;
+      }
     },
   },
   computed: {
@@ -67,14 +68,23 @@ const App = {
     // 1. текущий выбранный шаг
     // 2. выключена ли кнопка назад
     // 3. находимся ли мы на последнем шаге
-    startSteps(){
-      if(!this.flag){
-        return this.textBtnPrevOfStart[1]
+    currentStep() {
+      return this.steps[this.activeIndex]
+    },
+    startSteps() {
+      if(this.expire){
+        return this.textBtnPrevOrStart[0];
+      }
+      else {
+        return this.textBtnPrevOrStart[1];
       }
     },
     finishStepsComputed() {
-      if (this.activeIndex === this.steps.length - 1) {
-        return this.textBtnNextOfFinish[1]
+      if (this.activeIndex !== this.steps.length - 1) {
+        return this.textBtnNextOrFinish[0];
+      }
+      else {
+        return this.textBtnNextOrFinish[1];
       }
     },
   },

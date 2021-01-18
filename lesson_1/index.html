@@ -12,7 +12,7 @@
     <h1>План по изучению Vue.js</h1>
 
     <div class="steps">
-      <div class="steps-content">{{steps[activeIndex].text}}</div>
+      <div class="steps-content">{{currentStep.text}}</div>
       <ul class="steps-list">
         <li
           :class=" {
@@ -20,29 +20,29 @@
               'done': activeIndex > idx,
               'active': activeIndex === idx
             }"
-          v-for="(item, idx) in steps.length"
+          v-for="(item, idx) in steps"
         >
-          <span @click="flag && setActive(idx)">{{idx + 1}}</span>
-          {{steps[idx].title}}
+          <span @click="expire && setActive(idx)">{{idx + 1}}</span>
+          {{item.title}}
         </li>
       </ul>
       <div>
         <button
           class="btn"
           :disabled="activeIndex === 0"
-          @click="flag ? prev() : reset()"
+          @click="expire ? prev() : reset()"
         >
           {{
-            startSteps || textBtnPrevOfStart[0]
+            startSteps
           }}
         </button>
         <button
           class="btn primary"
-          :style="{display: flag ? 'initial' : 'none'}"
-          @click="nextOfFinish"
+          v-if="expire"
+          @click="nextOrFinish"
         >
           {{
-            finishStepsComputed || textBtnNextOfFinish[0]
+            finishStepsComputed
           }}
         </button>
       </div>
